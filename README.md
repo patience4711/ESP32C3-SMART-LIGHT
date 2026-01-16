@@ -5,8 +5,8 @@ You can make a very intelligent and low-energy garden light that switches on abo
 
 The features it has are:
 - easy to connect to wifi
-- can be controlled via webui, mosquitto and http
-- dimmable
+- can be controlled via webui, mosquitto, http and optional buttons
+- dimmable by moving a slider in the webui or via buttons(optional)
 - 4 timers with advanced options
 - simple hardware
 - it logs memorable events
@@ -15,10 +15,12 @@ The features it has are:
 ## download
 [ESP32-C3-DIMMER](https://github.com/patience4711/ESP32C3-SMART-LIGHT/blob/main/ESP32_C3_DIMMER_v0_2.ino.bin)
 
+
 ## hardware
 - esp32c3 super mini
 - a mosfet module
 - 3mm wide ledstrip 5v
 - a 5v power supply
 
+![frontpage](https://github.com/user-attachments/assets/ffd2b610-0207-406d-a784-8bd20329a7b8)
   
