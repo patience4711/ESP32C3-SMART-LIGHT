@@ -8,6 +8,7 @@ The features it has are:
 - can be controlled via webui, mosquitto, http and optional buttons
 - dimmable by moving a slider in the webui or via buttons(optional)
 - 4 timers with advanced options
+- soft on and off
 - simple hardware
 - it logs memorable events
 - easy to debug
