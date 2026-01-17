@@ -15,7 +15,7 @@ The features it has are:
 - easy to debug
   
 ## download
-[ESP32-C3-DIMMER](https://github.com/patience4711/ESP32C3-SMART-LIGHT/blob/main/ESP32_C3_DIMMER_v0_2.ino.bin)
+[ESP32-C3-DIMMER-v0_3](https://github.com/patience4711/ESP32C3-SMART-LIGHT/blob/main/ESP32_C3_DIMMER_v0_3.ino.bin)
 
 
 ## hardware
