@@ -114,29 +114,25 @@ DNSServer dnsServer;
   WiFiUDP Udp; 
 
 // variables concerning clock and timers
-  time_t dagbegintijd = 0;
+  bool resyncFlag;
+  //time_t dagbegintijd = 0;
   time_t switchOnTime[4] = {0};
   time_t switchOfTime[4] = {0};
   time_t switchonMoment = 0;
   int dst;
-  // char timerActive[5] = "0000";
-  // char relToSunOn[5] = "0000"; 
-  // char relToSunOff[5] = "0000"; 
-  // char switchOn[21] = "00:0000:0000:0000:00";
-  // char switchOff[21] = "00:0000:0000:0000:00";
-  // char weekDag[29] = "nnnnnnnnnnnnnnnnnnnnnnnnnnnn";  
+ 
   #define MODE_ABSOLUTE        0
   #define MODE_BEFORE_SUNRISE  1
   #define MODE_AFTER_SUNRISE   2
   #define MODE_BEFORE_SUNSET   3
   #define MODE_AFTER_SUNSET    4
   #define TIMERCOUNT  4
-  //bool mustSwitch[4] = {false, false, false, false};
-  //bool hasSwitched[4] = {false, false, false, false};
+
   time_t Sunset = 0;
   time_t Sunrise = 0; 
   int tKeuze = 0;
-  uint8_t procesId = 1;
+   bool timeRetrieved = false;
+  
   typedef struct {
       bool    Active =false;
       uint8_t on_mode = 0; 
@@ -198,7 +194,7 @@ char requestUrl[20] = {""}; // to remember from which webpage we came
 
   //int dst;
   int iKeuze;
-  bool timeRetrieved = false;
+  uint8_t procesId = 1;
   int networksFound = 0; // used in the portal
   int datum = 0; //
 
@@ -253,44 +249,24 @@ char requestUrl[20] = {""}; // to remember from which webpage we came
 // *****************************************************************************
 
 void setup() {
-  pinMode(knop, INPUT_PULLUP); // de knop
-  pinMode(led_onb, OUTPUT); // onboard led
-//  pinMode(4, OUTPUT); // 
-//  digitalWrite(4, LOW); //
-//gpio_reset_pin((gpio_num_t)button1);
-//// **********
-//gpio_config_t io_conf;
-//io_conf.intr_type = GPIO_INTR_DISABLE;
-//io_conf.mode = GPIO_MODE_INPUT;
-//io_conf.pin_bit_mask = GPIO_BIT_MASK;
-//io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
-//io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
-//gpio_config(&io_conf);
-////**********************************  
+   pinMode(knop, INPUT_PULLUP); // de knop
+   pinMode(led_onb, OUTPUT); // onboard led
   
-  pinMode(button1, INPUT_PULLUP); // pin6
+   pinMode(button1, INPUT_PULLUP); // pin6
 
-  pinMode(button2, INPUT_PULLUP); // pin7
+   pinMode(button2, INPUT_PULLUP); // pin7
 
-  pinMode(testPin, OUTPUT); // pin10
-  digitalWrite(testPin, HIGH);
-  Serial.begin(115200); 
+   pinMode(testPin, OUTPUT); // pin10
+   digitalWrite(testPin, HIGH);
+   Serial.begin(115200); 
   
-  // experiments with pullup an filters
-//  gpio_new_pin_glitch_filter(button1);
-//  gpio_new_pin_glitch_filter(button2); 
-//  gpio glitch_filter_enable();
-
-//  gpio_pullup_en(gpio_num_t 6);
-//  gpio_pullup_en(gpio_num_t 7); 
-
-  ledc_init(); //initialize pwm
-  //methods we can use with pwm :
-  // - ledc_set_freq(LEDC_MODE, LEDC_TIMER, 2500); adapt frequency
-  // - uint32_t ledc_get_duty(ledc_mode_t speed_mode, ledc_channel_t channel)
-  // - ledc_set_fade_with_time(ledc_mode_t speed_mode, ledc_channel_t channel, uint32_t target_duty, int max_fade_time_ms)
-  // - set_pwm and fade_pwm
-  set_pwm(0); //led initial off 
+   ledc_init(); //initialize pwm
+   //methods we can use with pwm :
+   // - ledc_set_freq(LEDC_MODE, LEDC_TIMER, 2500); adapt frequency
+   // - uint32_t ledc_get_duty(ledc_mode_t speed_mode, ledc_channel_t channel)
+   // - ledc_set_fade_with_time(ledc_mode_t speed_mode, ledc_channel_t channel, uint32_t target_duty, int max_fade_time_ms)
+   // - set_pwm and fade_pwm
+   set_pwm(0); //led initial off 
 
    ledblink(1, 800);
 
@@ -314,21 +290,17 @@ void setup() {
 
   if ( Mqtt_Format != 0 ) 
   {
-       //Serial.println(F("setup: mqtt configure"));
        mqttConnect(); // mqtt connect
   } 
   else 
   {
        UpdateLog(3, "not enabled"); 
   }
-//  initWebSocket();
     
   Serial.println(F("\nbooted up"));
   Serial.println(WiFi.localIP());
 
   delay(1000);
-  //ledblink(3,500);
-
 
   eventSend(0);
 
@@ -345,15 +317,19 @@ void loop() {
     aantal += 1;
   } //
 
-  // we recalculate the switchtimes for this day when there is a new date
+if (day() != datum) // if the day overflows we arm the times for recalculation
+  {
+    mustCalc[0] = mustCalc[1] = mustCalc[2] = mustCalc[3] = true; //arm the timers for recalculation
+    resyncFlag = true;
+  }
+
   // if retrieve fails, day will not be datum, so we keep trying by healthcheck
-  if (day() != datum && hour() > 2) // if date overflew and later then 2
+  if (resyncFlag && hour() > 4) // if date overflew and later then 2
   { 
           getTijd(); // retrieve time and recalculate the switch times
-          mustCalc[0] = mustCalc[1] = mustCalc[2] = mustCalc[3] = true; //arm the timers for recalculation
-          //dtR = datum; 
+          //mustCalc[0] = mustCalc[1] = mustCalc[2] = mustCalc[3] = true; //arm the timers for recalculation
+          resyncFlag = false; 
   }
- 
   // timer calculation
   for(int r=0; r<TIMERCOUNT; r++)
   {   
