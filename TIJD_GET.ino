@@ -25,8 +25,7 @@ void getTijd() {
     } else {
    
       epochTime += atoi(gmtOffset) * 60;
-      setTime(epochTime); // dit moeten we doen omdat anders zomertijd() niet werkt
-      //Serial.print("epoch gecorrigeerd voor timezone = "); Serial.println(epochTime);
+      setTime(epochTime); // we have to dit it like this otherwise zomertijd() doesn't work
       if ( dts == true ) {
       // if it is currently summertime we add an hour  
       if (zomertijd() == true) {  

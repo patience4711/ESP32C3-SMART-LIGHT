@@ -321,13 +321,13 @@ if (day() != datum) // if the day overflows we arm the times for recalculation
   {
     mustCalc[0] = mustCalc[1] = mustCalc[2] = mustCalc[3] = true; //arm the timers for recalculation
     resyncFlag = true;
+    datum = day();
   }
 
   // if retrieve fails, day will not be datum, so we keep trying by healthcheck
   if (resyncFlag && hour() > 4) // if date overflew and later then 2
   { 
           getTijd(); // retrieve time and recalculate the switch times
-          //mustCalc[0] = mustCalc[1] = mustCalc[2] = mustCalc[3] = true; //arm the timers for recalculation
           resyncFlag = false; 
   }
   // timer calculation
@@ -351,11 +351,9 @@ if (day() != datum) // if the day overflows we arm the times for recalculation
 // ***************************************************************************
 //                       m q t t
 // ***************************************************************************
-       // before each transmission the connection is tested
-       // so we don't do this in the loop
-       if(Mqtt_Format != 0 ) MQTT_Client.loop(); //looks for incoming messages
-    
-
+    // before each transmission the connection is tested
+    // so we don't do this in the loop
+    if(Mqtt_Format != 0 ) MQTT_Client.loop(); //looks for incoming messages
   
   test_actionFlag();
   

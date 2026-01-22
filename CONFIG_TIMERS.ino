@@ -91,60 +91,69 @@ String zonatt_replace( String argument1, String argument2)
     String vervang = argument2 + "_" + argument1; // eg zonattaan_1
     consoleOut("zonat_replace returns" + vervang);
 
-// switch (argument1[0]) {
-//   case '0': //absoluut
-//     vervang = argument2 + "_1";
-//     break;
-//   case '1': // before sunset
-//     vervang = argument2 + "_2";
-//     break;
-//   case '2': // after sunset
-//     vervang = argument2 + "_3";
-//     break;
-//   case '3': // before sunrise
-//     vervang = argument2 + "_4";
-//     break;
-//   case '4': // after sunrise
-//     vervang = argument2 + "_5";
-//     break;
-//     }
 return vervang;
 }
 
+
+// ********************************************************************************************
+// *                   switching by the timers                                               *
+// ********************************************************************************************
+// this function filters out for which switch we must evaluate the switch on/off time
+// the criteria are musSwitch true, an all other timers hasSwitched false 
 // say timer 0 goes out and timer 1 should switch on at an earlier time. 
-// ********************************************************************************************
-// *                   switching by the timers or manual                                               *
-// ********************************************************************************************
-void schakelen() {
-    // *******************************************************************************************
-    //                             switch by timer 0  
-    // *******************************************************************************************
-    if (timerProp[0].Active == true && mustSwitch[0] && !hasSwitched[1] && !hasSwitched[2] && !hasSwitched[3] ) {  //als niet door timer1 of 2 is ingeschakeld
-    timer_schakel_in(0);
-    timer_schakel_uit(0);
-    }
-    // *******************************************************************************************
-    //                             switch by timer 1  
-    // *******************************************************************************************
-    if (timerProp[1].Active == true && mustSwitch[1] && !hasSwitched[0] && !hasSwitched[2] && !hasSwitched[3] ) {  //als niet door timer0 of 2is ingeschakeld  
-    timer_schakel_in(1);
-    timer_schakel_uit(1);
-    }
-    //// *******************************************************************************************
-    ////                           switch by timer 2 
-    //// *******************************************************************************************
-    if (timerProp[2].Active == true && mustSwitch[2] && !hasSwitched[0] && !hasSwitched[1] && !hasSwitched[3] ) { // als niet door timer 0 of 1 of 3 
-    timer_schakel_in(2);
-    timer_schakel_uit(2);
-    }
-    //// *******************************************************************************************
-    ////                           switch by timer 3 
-    //// *******************************************************************************************
-    if (timerProp[3].Active && mustSwitch[3] &&  !hasSwitched[0] && !hasSwitched[1] && !hasSwitched[2])  {  
-    timer_schakel_in(3);
-    timer_schakel_uit(3);
-    }
+// we make them wait util the 1st one finished
+void schakelen() 
+{
+    // first find out if any switch is on, if not whoSwitched=255
+    uint8_t whoSwitched = 255;
+    for(uint8_t x=0; x<4; x++)
+      {
+        if(hasSwitched[x]) { whoSwitched = x; break; }
+      }
+    //so now we know who has switched (if any)
+    for (uint8_t z = 0; z<4; z++)
+    {
+       if( !mustSwitch[z]) continue;
+       // if we are here mustSwitch[x] = true
+       // so is some switched and it is not z we continue
+       if( whoSwitched != 255 && whoSwitched != z) continue;
+       //if we are here, mustSwitch[z]=true and no other swich hasSwiched
+        timer_schakel_in(z);
+        timer_schakel_uit(z);
+     }
 }
+
+// void schakelen() {
+//     // *******************************************************************************************
+//     //                             switch by timer 0  
+//     // *******************************************************************************************
+//     //if (timerProp[0].Active == true && mustSwitch[0] && !hasSwitched[1] && !hasSwitched[2] && !hasSwitched[3] ) {  //if not another timer has switched
+//     if (mustSwitch[0] && !hasSwitched[1] && !hasSwitched[2] && !hasSwitched[3] ) {  //if not another timer has switched
+//     timer_schakel_in(0);
+//     timer_schakel_uit(0);
+//     }
+//     // *******************************************************************************************
+//     //                             switch by timer 1  
+//     // *******************************************************************************************
+//     if (mustSwitch[1] && !hasSwitched[0] && !hasSwitched[2] && !hasSwitched[3] ) {  //als niet door timer0 of 2is ingeschakeld  
+//     timer_schakel_in(1);
+//     timer_schakel_uit(1);
+//     }
+//     //// *******************************************************************************************
+//     ////                           switch by timer 2 
+//     //// *******************************************************************************************
+//     if (mustSwitch[2] && !hasSwitched[0] && !hasSwitched[1] && !hasSwitched[3] ) { // als niet door timer 0 of 1 of 3 
+//     timer_schakel_in(2);
+//     timer_schakel_uit(2);
+//     }
+//     //// *******************************************************************************************
+//     ////                           switch by timer 3 
+//     //// *******************************************************************************************
+//     if (mustSwitch[3] &&  !hasSwitched[0] && !hasSwitched[1] && !hasSwitched[2])  {  
+//     timer_schakel_in(3);
+//     timer_schakel_uit(3);
+//     }
+// }
 
 
 void timer_schakel_in(int welke) {

@@ -68,3 +68,6 @@ when there was an attempt to (re)start the coordinator to reflect the status in 
 // with the c3 this causes problems at a certain point the server does not react anymore and nothing help
 // only removing all server handlers has effect the homepage, menu an basis settings work
 // added events
+
+
+    

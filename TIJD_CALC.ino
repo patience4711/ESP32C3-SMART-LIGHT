@@ -46,52 +46,6 @@ void printDate(time_t date) {
   Serial.print(buff);
 }
 
-// // ********** calculate the switch moment for today *********************************
-// void switchCalc() {
-//   // what happens here:
-//   // we know sunset for today
-//   // we know switchtime (if after 2400 we add 2400 
-//   // if now > sunset dan inschakelen
-//   // uitschakelen als now > uitschakeltijd maar:
-//   // na 2400 wordt de uitschakeltijd opnieuw berekend en dan gaat het mis
-//   // dus deze berekening moeten we timen.
-// sun_setrise(); // calculate first sunset and rise
-// //consoleOut("current time in unixtime expressed: ");
-// //DebugPrint(now());
-// //DebugPrintln("");
-//  // we calculate unixtime at 00:00 today
-// //tmElements_t myElements = {0, 0, 0, 0, 
-// //static_cast<uint8_t>(day()),
-// //static_cast<uint8_t>(month()), 
-// //static_cast<uint8_t>(year() - 1970)};
-
-// //dagbegintijd = makeTime(myElements);
-// //DebugPrint("daystart in unixtime: ");
-// //DebugPrint(dagbegintijd);
-// //DebugPrintln("");
-// // we hebben sunset bijv 1500 414286 dit zijn seconden
-// //dagbegintijd zijn ook seconden dus sunsettijd zijn het aantal seconden op deze dag
-// //sunsettijd = (414286 - 336000)/ 60 = 1304 minuten
-// //sunrisetijd = (sunrise - dagbegintijd)/60; //uitgedrukt in minuten voor zendpage
-// //sunsettijd = (sunset - dagbegintijd)/60; //uitgedrukt in minuten voor zendpage
-// //sunrise = (dagbegintijd + sunrise); 
-// //sunset = (dagbegintijd + sunset);
-
-// // wat is de inschakeltijd van timer 1 uitgedrukt in sec ?
-// // we weten sunset uitgedrukt in unixtijd. hierbij tellen we op
-// // of trekken we af het aantal seconden van de opgegeven tijd 
-// // we hebben switchon1 en switchoff1, deze moeten we in seconden omzetten
-// // weekday geeft een getal, zondag = 1
-// //char b = timer[0];
-
-//           timerCalc(0); 
-//           timerCalc(1);          
-//           timerCalc(2);
-//           timerCalc(3);          
-      
-
-// }  // einde switchcalc
-
 // *****************************************************************
 //                    berekeningen timers van 0 t/m ...
 //******************************************************************
