@@ -310,36 +310,43 @@ void setup() {
 //*                         LOOP
 //*****************************************************************************
 void loop() {
-  
+  // this is a check whether the sysemtime is correct and if not we do 3 attempts to get it.
   int aantal = 0;
   if (!timeRetrieved && aantal < 3 && WiFi.status() == WL_CONNECTED) {
     getTijd(); // doet ook alle berekeningen
     aantal += 1;
   } //
 
-if (day() != datum) // if the day overflows we arm the times for recalculation
+// if there is a new date me need to recalculate the timers so we flag them for calculation.
+// It is important that the sunset and sunrise are calculated as these are unix times
+// so we cannot use the values of the day before (diiference - 24 hrs)
+// ofcourse we must have a valid system time
+// 
+if (day() != datum && timeRetrieved == true )
   {
+    sun_setrise(); 
     mustCalc[0] = mustCalc[1] = mustCalc[2] = mustCalc[3] = true; //arm the timers for recalculation
-    resyncFlag = true;
+    resyncFlag = true; // sync the time later
     datum = day();
   }
 
   // if retrieve fails, day will not be datum, so we keep trying by healthcheck
   if (resyncFlag && hour() > 4) // if date overflew and later then 2
   { 
-          getTijd(); // retrieve time and recalculate the switch times
-          resyncFlag = false; 
+    getTijd(); // retrieve time and recalculate the switch times
+    resyncFlag = false; 
   }
-  // timer calculation
+  /* timer calculation
+   we calculate the timer only when there is a 
+   valid time, (time is retrieved)
+   it is off (hasSwitched = false)
+   it has not been done already (mustCalc = true)
+   tinmerCalc always return with mustCalc = false because we only calculate
+   when these conditions are met.
+  */
   for(int r=0; r<TIMERCOUNT; r++)
   {   
-    // we calculate the timer only when there is a 
-    // valid time, (timne is retrieved)
-    // it is off (hasSwitched = false)
-    // it has not been done already (mustCalc = true)
-    // tinmerCalc always return with mustCalc = false because we only calculate
-    // when these conditions are met.
-    if(timeRetrieved && !hasSwitched[r]  && mustCalc[r]) timerCalc(r);
+    if(timeRetrieved && !hasSwitched[r] && mustCalc[r])  timerCalc(r);
   }
 // ****************************************************************************
 //                switch by the timers

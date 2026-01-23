@@ -37,8 +37,8 @@ void getTijd() {
     timeRetrieved=true;  
     UpdateLog(1, "got time");
     ntpUDP.stop();
-    datum = day();
-    sun_setrise(); // calculate the sunrise and sunset
+    //datum = day();
+    //sun_setrise(); // calculate the sunrise and sunset
     }//yield();
     //delay(10);
     //switchCalc(); // calculate the switchtimes
