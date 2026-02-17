@@ -25,7 +25,7 @@ void read_onboard_button() {
           // if (my_device) {
           //   my_device->updateAndReportParam(ESP_RMAKER_DEF_POWER_NAME, dimmer_state);
           // }
-          set_power(dimmer_state);
+          (dimmer_state==true) ? set_dim_level(last_duty): set_dim_level(0);
         }
       }
 
@@ -98,9 +98,18 @@ void check_button1()
   if(digitalRead(button1) == HIGH){ // released
       dimmer_state = !dimmer_state; // toggle true and false
       Serial.printf("Toggle State to %s.\n", dimmer_state ? "true" : "false");
-      set_power(dimmer_state); 
+      //set_power(dimmer_state); 
       delay(100); // prevent re-reading before ready fading
-      (dimmer_state == true) ? UpdateLog(6, "switched on") : UpdateLog(6, "switched off");
+      //(dimmer_state == true) ? UpdateLog(6, "switched on") : UpdateLog(6, "switched off");
+      if(dimmer_state == true) 
+      { 
+          UpdateLog(6, "switched on"); 
+          set_dim_level(last_duty);
+      } else 
+      { 
+        UpdateLog(6, "switched off");
+        set_dim_level(0);
+      }
   } 
       else 
   {

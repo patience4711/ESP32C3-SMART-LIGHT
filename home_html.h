@@ -93,7 +93,7 @@ body {font-family:arial; font-size: 12px;}
 <br><br>
 <button class="bt1" id="toggleBtn" onclick="toggleValue()">on/off</button>
 <br>
-<center><input type="range" id="duty" name="DT" min="1" max="100" value="{DT}" class="slider" onchange="handlePwm(false)">
+<center><input type="range" id="duty" name="DT" min="0" max="100" value="{DT}" class="slider" onchange="handlePwm(false)">
 
 <br><br><br><button class="bt2" onClick='handlePwm(true)' id='saveBt'>dim value : <span id="demoLPM"</span></button>
 </div><br><br>
@@ -128,7 +128,7 @@ function handlePwm(shouldSave) {
   var sldr = document.getElementById('duty');
   var veld = document.getElementById('demoLPM');
 
-  veld.style.color = "red";
+  //veld.style.color = "red";
   const val = sldr.value;
   const url = shouldSave ? `/submitPwm?pwmVal=${val}&save=1` : `/submitPwm?pwmVal=${val}`;
   // Stuur de waarde naar de ESP32

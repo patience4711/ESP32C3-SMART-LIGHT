@@ -28,6 +28,7 @@ void saveSettings() {
   prefs.putBytes("config", &settings, sizeof(mySettings));
   prefs.end();
   Serial.println("settings saved with prefs!");
+  actionFlag = 20; //reconnect mosquitto and getTime
 }
 
 void loadSettings() {

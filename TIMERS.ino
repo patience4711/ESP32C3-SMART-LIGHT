@@ -106,68 +106,6 @@ void handleTimerSave()
           return;
 }
 
-// void handleTimers() 
-// {
-//     int i = server.arg("welke").toInt();
-//     //int i = server.getParam("welke")->value().c_str() ) ;
-//     tKeuze = i;
-//     consoleOut("tKeuze is " + String(i));
-//     snprintf(requestUrl, sizeof(requestUrl), "/TIMER?welke=%d", i);
-//     //nu roepen we zendpageRelevant aan
-//     zendPageRelevantTimers(); 
-// }
-
-
-// // **********************************************************************
-// //        replace the timerpage with the actual values
-// // **********************************************************************
-// void plaats_timerpage() 
-// {
-// // we moeten de timerpagina plaatsen 
-//     consoleOut("timer page_replace");
-//     toSend.replace("<irame name>" , FPSTR(TIMER_GENERAL));  
-//     toSend.replace("{nr}" , String(tKeuze)); // vervang timer nummer
-        
-//     if(timers[tKeuze].Active) toSend.replace("tActive", "checked");
-//     // we put back "selected" for the option in the selectbox zonattaanwelke_1 2 3 4 or 5 
-//     toSend.replace("{lev}" , String(timers[tKeuze].Level)); // vervang level
-    
-    
-//     //toSend.replace(zonatt_replace(String(relToSunOn[tKeuze]), "zonattaan"), "selected"); 
-//     //toSend.replace(zonatt_replace(String(relToSunOff[tKeuze]), "zonattuit"), "selected"); 
-    
-//     // the function String zonat_replace( String(timerProp[tKeuze].on_mode), "zonattaan") tells us what to replace with "selected"
-    
-//     toSend.replace(zonatt_replace(String(timers[tKeuze].on_mode), "zonattaan"), "selected");
-//     toSend.replace(zonatt_replace(String(timers[tKeuze].of_mode), "zonattuit"), "selected");
-    
-//      // put back the checked selectboxes 
-//     const char *grap[] = {"selzo", "selma", "seldi", "selwo", "seldo", "selvr", "selza"};
-//     String vervang = "";
-//     //weekDag
-//      consoleOut("replace checkboxes to show the checked ones");
-//     // voor deze timer doen, 7x
-//     //int i = tKeuze;
-//         for(int x=0; x<7; x++){ // bij 3 is dit van 21 tot 27 kleiner dan 28
-
-//           vervang = String(grap[x]); // als i=3 dan van 21-21 naar 27
-
-//                if (timers[tKeuze].dow[x] == true) { toSend.replace(vervang, "checked");}
-//          }
-    
-    
-//       consoleOut("replace the time values");
-//       //toSend.replace("{inx}"  , "" + String(switchOn[tKeuze*5]) + String(switchOn[tKeuze*5+1]) + String(switchOn[tKeuze*5+2]) + String(switchOn[tKeuze*5+3]) + String(switchOn[tKeuze*5+4]));
-//       //toSend.replace("{uitx}" , "" + String(switchOff[tKeuze*5]) + String(switchOff[tKeuze*5+1]) + String(switchOff[tKeuze*5+2]) + String(switchOff[tKeuze*5+3]) + String(switchOff[tKeuze*5+4])); 
-//       char buf[6];  // "HH:MM\0"
-//       snprintf(buf, sizeof(buf), "%02u:%02u", timers[tKeuze].on_hh, timers[tKeuze].on_mm);
-//       toSend.replace("{onX}"  , buf );
-//       snprintf(buf, sizeof(buf), "%02u:%02u", timers[tKeuze].of_hh, timers[tKeuze].of_mm);
-//       toSend.replace("{ofX}"  , buf);
-    
-// }  
-//     // placed the page for the chosen timer
-
 
 // this function returns the value of vervang
 // input is p.e. "1" and zonattaan
@@ -215,7 +153,7 @@ void schakelen()
 // check if it is time to switch
 void timer_schakel_in(int welke) {
             if ( now() > (switchOnTime[welke]) && now() < switchOfTime[welke] && !hasSwitched[welke]) { 
-                lampOnNow(true, false, welke+20); // lamp on right away
+                lampOnNow(welke+20); // lamp on right away
                 hasSwitched[welke] = true;
                 //consoleOut("switched on by timer" + String(welke));
             }
@@ -223,7 +161,7 @@ void timer_schakel_in(int welke) {
  
 void timer_schakel_uit(int welke) {
          if ( now() > switchOfTime[welke] && hasSwitched[welke] ) { // als event 3 4 5 of 6 is
-              lampOffNow(true, false, welke+20); //lamp off right away, mqtt message, checkTimers
+              lampOffNow(welke+20); //lamp off right away, mqtt message, checkTimers
               mustSwitch[welke] = false;
               hasSwitched[welke] = false; // prevent repetitions
               //consoleOut("switched off by timer"+ String(welke));
@@ -239,43 +177,21 @@ void checkTimers() {
       if ( hasSwitched[3] ) mustSwitch[3] = hasSwitched[3] = false;// to prevent that its switches on again 
 }
 
-void lampOnNow(bool zend, bool check, int who) {
-      if(who > 19) // if switched by a timer we sould fade to timers[wie].Level
+void lampOnNow(int who) {
+      if(who > 19) // if switched by a timer we should fade to timers[wie].Level
       {   
         uint8_t wie = who-20;
-        //duty = (timerProp[wie].Level);
-        //currentLevel = timers[wie].Level;
-        //fade_pwm(timers[wie].Level);
         set_dim_level(timers[wie].Level);
       // switched by someone else we use the last known duty
       } else {
         set_dim_level(last_duty);
-        //fade_pwm(duty);
-        //if(duty == 0) duty = backupDuty;
-        //currentLevel = duty;
       }
-      //switchonMoment = now();
-      //consoleOut("on: duty cycle set to " + String(currentLevel));
-      //dimm = 1;
-      //digitalWrite(led_onb, LED_AAN);
-      //if( zend ) { sendMqttswitch(); }// mqtt switch state
-      //if( check ) {checkTimers();} // disarm timers that are on  
       UpdateLog(who, "switched on");
-      //eventSend(0);
     }
 
-void lampOffNow(bool zend, bool check, int who) 
+void lampOffNow(int who) 
     {
-        //ledcWrite(0,256);
-        //soft_off();
         set_dim_level(0);
-        //fade_pwm(0);
         consoleOut("duty cycle set to 0");
-        //lampState = 0;
-        //currentLevel = 0;
-        //digitalWrite(led_onb, LED_UIT);
-        //if( zend ) { sendMqttswitch(); }// mqtt switch state
-        //if( check ) {checkTimers();} // disarm timers that are on  
         UpdateLog(who, "switched off");
-        //eventSend(0);
     }

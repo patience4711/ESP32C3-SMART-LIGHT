@@ -47,3 +47,28 @@ String getChipId(bool sec) {
   }
   if(sec) return String(chipId); else return "ESP32-SWITCH-" + String(chipId);
 }
+
+bool loginBoth(String who) {
+  const char* realm = "Login Required";
+  bool authenticated = false;
+
+  if (who == "admin") {
+    realm = "Admin Login";
+    authenticated = server.authenticate("admin", settings.passwd); 
+  } 
+  else if (who == "both") {
+    realm = "User or Admin Login";
+    // Check beide accounts
+    authenticated = server.authenticate("admin", settings.passwd) || 
+                    server.authenticate("user", settings.userPwd);
+  }
+
+  if (!authenticated) {
+    // Toon de popup in de browser
+    server.requestAuthentication(BASIC_AUTH, realm, "Login failed!");
+    server.send(401, "text/html", "<html><body><h1>access denied</h1><p>Click <a href='/'>here</a> to go back.</p></body></html>");
+    return false; // Toegang geweigerd
+  }
+  
+  return true; // Toegang verleend
+}

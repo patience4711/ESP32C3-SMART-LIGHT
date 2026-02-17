@@ -22,7 +22,7 @@ void handleSettings() {
   toSend.replace("%DUTY%",     String(settings.default_duty));
   toSend.replace("%MQPRT%",    String(settings.Mqtt_Port));
   toSend.replace("%MQFMT%",    String(settings.Mqtt_Format));
-
+  toSend.replace("%MQIDX%",    String(settings.Mqtt_switchIDX));
   // --- Booleans (Checkboxes) ---
   toSend.replace("%DTS_CHK%",  settings.DTS ? "checked" : "");
   toSend.replace("%DIAG_CHK%", settings.diagNose ? "checked" : "");
@@ -54,7 +54,7 @@ if (server.method() != HTTP_POST) { server.send(405, "text/plain", "Method Not A
   settings.default_duty = server.arg("duty").toInt();
   settings.Mqtt_Port = server.arg("mqPrt").toInt();
   settings.Mqtt_Format = server.arg("mqFmt").toInt();
-
+  settings.Mqtt_switchIDX = server.arg("mqIdx").toInt();
   // Booleans (Checkboxes)
   settings.DTS = server.hasArg("DTS");
   settings.diagNose = server.hasArg("diag");

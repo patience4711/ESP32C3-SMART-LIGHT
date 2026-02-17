@@ -33,8 +33,18 @@ void write_callback(Device *device, Param *param,
         Serial.printf("Received value = %s for %s - %s\n", val.val.b ? "true" : "false", device_name, param_name);
         dimmer_state = val.val.b; //
         //(dimmer_state == false) ? digitalWrite(gpio_dimmer, LOW) : digitalWrite(gpio_dimmer, HIGH);
-         (dimmer_state == false) ? set_power(false) : set_power(true);
-         (dimmer_state == false) ? UpdateLog(4, "switched off") : UpdateLog(4, "switched on");
+         //(dimmer_state == false) ? set_power(false) : set_power(true);
+         //(dimmer_state == false) ? UpdateLog(4, "switched off") : UpdateLog(4, "switched on");
+         if(dimmer_state == false)
+         {
+          set_dim_level(0);
+          UpdateLog(4, "switched off");
+          // disarm a timer when active
+          checkTimers();
+         } else {
+          set_dim_level(last_duty);
+          UpdateLog(4, "switched on");
+         }
         //param->updateAndReport(val);
     }
 }

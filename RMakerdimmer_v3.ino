@@ -90,6 +90,20 @@ void setup() {
   // make sure we have light when on boot 'on' is called
   last_duty = 50; // fall back value
   if(settings.default_duty > 0 ) last_duty = settings.default_duty; 
+  
+    // ****************** mqtt init *********************
+   MQTT_Client.setKeepAlive(150);
+   MQTT_Client.setServer(settings.Mqtt_Broker, settings.Mqtt_Port);
+   MQTT_Client.setBufferSize(1024);
+   MQTT_Client.setCallback ( MQTT_Receive_Callback ) ;
+
+  if ( settings.Mqtt_Format != 0 ) 
+    {
+        mqttConnect(); // mqtt connect
+    } 
+
+  
+  
   }
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -152,6 +166,19 @@ void loop() {
 
   if(digitalRead(button1) == LOW) check_button1();
 
+  // ***************************************************************************
+  //                       m o s q u i t t o
+  // ***************************************************************************
+  // before each transmission the connection is tested
+  // so we don't do this in the loop
+  if(settings.Mqtt_Format != 0 ) MQTT_Client.loop(); //looks for incoming messages
+  
+  //  SERIAL: *************** check if there is data on serial **********************
+  if(Serial.available()) {
+       handle_Serial();
+   }
+  
+  
    delay(1);
    server.handleClient();
    vTaskDelay(1);

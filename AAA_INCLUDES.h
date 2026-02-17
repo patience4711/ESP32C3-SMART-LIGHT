@@ -54,6 +54,11 @@ static Device *my_device = NULL;
 
 #include <Preferences.h>  //#include <AsyncTCP.h>
 Preferences prefs;
+
+#include <PubSubClient.h>
+WiFiClient espClient ;
+PubSubClient MQTT_Client ( espClient ) ;
+
 //
 //#include "Async_TCP.h" //we include the customized one
 
@@ -164,6 +169,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
     char     Mqtt_Clientid[26];
     int      Mqtt_Port = 1883;
     int      Mqtt_Format = 0;
+    int      Mqtt_switchIDX = 0;
     bool     diagNose = false; // initial true but can be set false in settings
   }__attribute__((packed));
   mySettings settings;
@@ -210,9 +216,9 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
   bool Log_MaxReached = false;
   byte logNr = 0;
 
-  WiFiClient espClient ;
-  PubSubClient MQTT_Client ( espClient ) ;
-  int Mqtt_switchIDX = 123;
+ // WiFiClient espClient ;
+ // PubSubClient MQTT_Client ( espClient ) ;
+ // int Mqtt_switchIDX = 123;
 
   //const int resolution = 8;
   const unsigned long HEALTH_INTERVAL = 10UL * 60UL * 1000UL;

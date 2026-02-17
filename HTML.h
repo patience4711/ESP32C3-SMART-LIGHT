@@ -73,12 +73,15 @@ font-weight: bold;
 <tr><th colspan="2">MQTT Settings</th>
 <tr><td>broker address<td><input type="text" name="mqBrk" value="%MQBRK%" maxlength="29">
 <tr><td>port<td><input type="number" name="mqPrt" value="1883">
-<tr><td>Username<td><input type="text" name="mqUsr" value="%MQUSR%" maxlength="25">
-<tr><td>Password<td><input type="text" name="mqPwd" value="%MQPWD%" maxlength="25">
-<tr><td>client id<td><input type="text" name="mqCID" value="%MQCID%" maxlength="25">
 <tr><td>in topic<td><input type="text" name="mqIn" value="%MQIN%" maxlength="25">
 <tr><td><label>out topic<td><input type="text" name="mqOut" value="%MQOUT%" maxlength="25">
 <tr><td>data format<td><input type="number" name="mqFmt" value="%MQFMT%" min="0" max="5">
+<tr><td>domoticz idx<td><input type="text" name="mqIdx" maxlength="4" pattern="\[0-9]{1,4}" inputmode="numeric" value="%MQIDX%" >
+<tr><td>Username<td><input type="text" name="mqUsr" value="%MQUSR%" maxlength="25">
+<tr><td>Password<td><input type="text" name="mqPwd" value="%MQPWD%" maxlength="25">
+<tr><td>client id<td><input type="text" name="mqCID" value="%MQCID%" maxlength="25">
+
+
 </tr>
 <tr><td colspan="2">
       <button type="submit" class="btn">SAVE SETTINGS </button></td></tr>

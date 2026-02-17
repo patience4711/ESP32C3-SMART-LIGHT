@@ -9,7 +9,7 @@ const char TIMERCONFIG_MAIN[] PROGMEM = R"=====(
 <style>
 .nav { background: #eee; padding: 10px; }
 .nav a { margin-right: 10px; cursor: pointer; color: blue; text-decoration: none; }
-iframe { width: 100%; height: 400px; border: 1px solid #ccc; margin-top: 10px; }
+iframe { width: 100%; height: 500px; border: 1px solid #ccc; margin-top: 10px; }
 .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 </style>
 </head>
@@ -44,15 +44,22 @@ tr {height: 40px;}
 .btn { background: #28a745; color: white; padding: 12px; border: none; width: 100%; margin-top: 25px; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: bold; }
 body {font-family:arial; font-size: 14<td>px;}
 tr {height: 40px;}
-table {width:90%;}
+table {width: 100%; table-layout: fixed;
+/* Maak de inputs en selects passend */
+input[type='time'], select.sb1 {
+    width: 100%;          /* Gebruik de volledige breedte van de tabelcel */
+    box-sizing: border-box; /* Zorg dat padding de breedte niet beïnvloedt */
+    padding: 5px;
+    /* Iets kleiner op mobiel helpt vaak */
+}
+
 </style></head><body>
 <center><H1 style='color:#e207fa;'>TIMER {nr} </h1>
 <form id='formulier' method='get' action='/submitTimers' target='_parent'>
 
 <center><table>
-<tr><td style='width:60px;'>active?<td style='width:80px'><input type='checkbox' name='ta' tActive>
-<tr><td>level<td><input class ='inp3' type='number' name='lev' value="{lev}" min="10" max="100">
-
+<tr><td style='width:60px;'>active?<td style='width:100px'><input type='checkbox' name='ta' tActive>
+<tr><td>level<td><input class ='inp3' type='number' name='lev' value="{lev}" min="10" max="100"><td style='width:120px'></td></tr>
 
 <tr>
 <tr><td>on :
@@ -88,5 +95,5 @@ table {width:90%;}
 
 <button type="submit" class="btn">SAVE TIMER </button></td></tr>
 
-</center><br>
+</center><br></html>
  )=====";

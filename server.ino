@@ -12,18 +12,34 @@ void startServer()
   }
 
   server.on("/", HTTP_GET, []() {
+    if(!loginBoth("both")) return;
     String toSend = home_html;
     server.send(200, "text/html", toSend);
   });  
   
   
   server.on("/MENU", HTTP_GET, []() {
+  // we cannot open the menu from outside our own network.  
+  if(checkRemote(server.client().remoteIP().toString()) ) 
+  {
+    // Send a redirect header to the browser
+    server.sendHeader("Location", "/DENIED");
+    server.send(302, "text/plain", ""); // 302 = Found / Temporary Redirect
+    return; // Stop handling the rerequest
+  }
+  if(!loginBoth("admin")) return;
+  
   String toSend = menu_html;
   server.send(200, "text/html", toSend);
   });  
   
-  server.on("/SETTINGS", handleSettings);
+  server.on("/SETTINGS", HTTP_GET, []() {
+  if(!loginBoth("admin")) return;
+  handleSettings();
+  });
+
   server.on("/saveSettings", handleSaveSettings);
+  
   //server.on("/test.svg", drawGraph);
 //   server.on("/inline", []() {
 //     server.send(200, "text/plain", "this works as well");
@@ -32,9 +48,16 @@ void startServer()
 
  // server.on("/CLEAR-LOG", handleLogClear); 
 
-  server.on("/TIMERCONFIG", zendpageTimers);
+  //server.on("/TIMERCONFIG", zendpageTimers);
 
   server.on("/timer", handleTimer); 
+  
+  server.on("/TIMERCONFIG", HTTP_GET, []() {
+  if(!loginBoth("admin")) return;
+  zendpageTimers();
+  });
+  
+  
   server.on("/submitTimers", handleTimerSave); 
  
   // this handles the operation of the slider and the saving of defaultpwm
@@ -56,9 +79,18 @@ void startServer()
      dimmer_state = !dimmer_state; // Toggle de waarde
      consoleOut("New dimmer_state: " + String(dimmer_state));
      String json = "{\"state\":" + String(dimmer_state) + ",\"duty\":" + String(last_duty) + "}";
-    server.send(200, "application/json", json);
-     set_power(dimmer_state); // true or false
-     if(dimmer_state) UpdateLog(5, "switched on"); else UpdateLog(5, "switched off"); 
+     server.send(200, "application/json", json);
+     //set_power(dimmer_state); // true or false
+     if(dimmer_state) 
+     {
+      UpdateLog(5, "switched on");
+      set_dim_level(last_duty);
+     } else { 
+      UpdateLog(5, "switched off");
+      set_dim_level(0);
+     } 
+     // if there is a tinmer active and we switch off, the timer must be disarmed
+     if(!dimmer_state) checkTimers();
      });
     
     server.on("/REBOOT", HTTP_GET, []() {
@@ -80,11 +112,13 @@ void startServer()
     });
    
    server.on("/changed", []() {
-    // Stuur simpelweg de status van de lamp/pin terug
+    // send simply back the dimmer state
     (dimmer_state == true) ? server.send(200, "text/plain", "1") : server.send(200, "text/plain", "0");
 
 });
-   
+   server.on("/DENIED", HTTP_GET, []() {
+   server.send_P(200, "text/html", "<center><h2>FORBIDDEN");
+   });
    server.on("/ABOUT", handleAbout);
    server.onNotFound(handleNotFound);
    Serial.println("HTTP server started");
@@ -111,10 +145,10 @@ void handleToggle() {
 // {
 //   String toSend=FPSTR()
 // }
-void handleNotFound()
-{
-  server.send(200, "text/html", "<center><h2>this request is invalid</h2></center>");  
-}
+// void handleNotFound()
+// {
+//   server.send(200, "text/html", "<center><h2>this request is invalid</h2></center>");  
+// }
 
 // void handlePwm()
 // {
