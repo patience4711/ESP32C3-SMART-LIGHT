@@ -3,7 +3,11 @@ const char menu_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html><html><head><meta charset='utf-8'>
 <title>ESP32-C3-DIMMER</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<link rel="stylesheet" type="text/css" href="/STYLES">
+<style>
+.nav.nav-large { height: 200px; }
+</style>
+<!--
 <style>
 body {font-family:arial; font-size: 12px;}
 .nav { background: #eee; padding: 10px; }
@@ -19,6 +23,7 @@ font-size:40px;
 font-weight: bold; 
 }   
 </style>
+-->
 <script>
 function close() {
 window.location.href='/';
@@ -28,12 +33,12 @@ window.location.href='/';
 <body>
 <div class='container'>
 <div class='nav'>
-<span class='close'><a href="/">&times;</a></span>
+<span class='close'><a href="/">X</a></span>
 <br><br></div>
 <center>
 <br><br>
 <h2>ESP32 DIMMER MENU</h2><br><br>
-<div class="nav">
+<div class="nav nav-large">
 
 <table><tr>
 <td style="width:120px"><a href='/TIMERCONFIG'>timers</a></td><td style="width:60px"></td><td style="width:120px">

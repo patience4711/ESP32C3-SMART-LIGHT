@@ -1,4 +1,37 @@
 
+const char STYLES[] PROGMEM = R"=====(
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {font-family:arial; font-size: 12px;}
+.nav { background: #eee; padding: 10px; align-items: center; height: 40px;}
+
+.nav a { margin-right: 10px; cursor: pointer; color: blue; 
+text-decoration: none; font-size:20px;}
+
+.container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+.btn { background: #28a745; color: white; padding: 12px; border: none; width: 100%; margin-top: 25px; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: bold; }
+
+.btn:hover { background: #218838; }
+tr {height: 20px;}
+th { background-color: lightblue; padding: 20px; font-size: 14px}
+
+input[type=text], input[type=number], select { 
+       width: 100%; padding: 10px; margin-top: 4px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; 
+    }
+.close a {
+color:red; 
+text-decoration: none; 
+float:right;   
+font-size:20px; 
+font-weight: bold;
+}
+)=====";
+
+
 // //<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 // const char HTML_HEAD[] PROGMEM = R"=====(
 // <!DOCTYPE html><html><head><meta charset='utf-8'>
@@ -27,32 +60,13 @@ const char settings_html[] PROGMEM = R"rawliteral(
 <head>
   <title>ESP32 Dimmer Config</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: sans-serif; background: #f0f2f5; padding: 10px; }
-    
-    .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-       
-    input[type=text], input[type=number], select { 
-       width: 100%; padding: 10px; margin-top: 4px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; 
-    }
-  th { background-color: lightblue; padding: 20px}
-   
-  .btn { background: #28a745; color: white; padding: 12px; border: none; width: 100%; margin-top: 25px; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: bold; }
-  .btn:hover { background: #218838; }
-  .nav { background: #eee; padding: 10px; }
-  .close a {
-color:red; 
-text-decoration: none; 
-float:right;   
-font-size:40px;
-font-weight: bold; 
-}
-</style>
+  <link rel="stylesheet" type="text/css" href="/STYLES"> 
+  
 </head>
 <body>
 <div class="container">
 <div class="nav">
-<span class='close'><a href="/">&times;</a></span>   
+<span class='close'><a href="/">X</a></span>   
 <br><br></div>
 <form action="/saveSettings" method="POST">
       
@@ -62,7 +76,8 @@ font-weight: bold;
 <tr><td>admin passwd<td><input type="text" name="passwd" value="%PASSWD%" maxlength="10">
 <tr><td>user passwd<td><input type="text" name="userPwd" value="%USERPWD%" maxlength="10">
 <tr><td>security level<td><input type="number" name="secLvl" value="%SECLVL%" min="0" max="255">
-<tr><td>default dim level<td><input type="number" name="duty" value="%DUTY%" min="0" max="1023"><tr><td>diagnose<td><input type="checkbox" name="diag" %DIAG_CHK%>
+<tr><td>default dim level<td><input type="number" name="duty" value="%DUTY%" min="0" max="1023">
+<tr><td>diagnose<td><input type="checkbox" name="diag" %DIAG_CHK%>
 
 <tr><th colspan="2">Location and Time</th>
 <tr><td>longitude<td><input type="number" name="longi" value="%LONGI%" step="0.001">
@@ -95,6 +110,8 @@ const char HTML_LOGPAGE[] PROGMEM = R"=====(
 <!DOCTYPE html><html><head><meta charset='utf-8'>
 <title>ESP32-DIMMER</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="/STYLES">
+
 <style>
 #lijst {
  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -121,27 +138,16 @@ const char HTML_LOGPAGE[] PROGMEM = R"=====(
 #lijst{ font-size:12px; }
 #lijst td, #lijst tr { padding:2px; height: 16px;}
 }
-.nav { background: #eee; padding: 10px; }
-.nav a { margin-right: 10px; cursor: pointer; color: blue; text-decoration: none; font-size:20px;}
-.container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-tr {height: 20px;}
 
-.close a {
-color:red; 
-text-decoration: none; 
-float:right;   
-font-size:40px;
-font-weight: bold; 
-}
 </style>
 <script type="text/javascript" src="SECURITY"></script>
 </head>
 <body>
 <div class='container'><center>
 <div class='nav'>
-<span class='close'><a href="/">&times;</a></span>
-<br><br></div>
-<h2>ESP32-DIMMER LOG</h2>
+<span class='close'><a href="/">X</a></span>
+<br><br></div><br>
+<h2>ESP32-DIMMER LOG</h2><br>
 <table><tr><td style='width:240px;'>Last refresh : 18 : 31 hr.<td>
 <button onClick='window.location.reload();' style='width: 100px' value='0'>Refresh</button></table><br>
 <table id='lijst'>

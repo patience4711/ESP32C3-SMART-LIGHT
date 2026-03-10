@@ -3,34 +3,21 @@ const char ABOUT [] PROGMEM = R"=====(
 <meta http-equiv="refresh" content="180">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset='utf-8'>
-<link rel="stylesheet" type="text/css" href="/STYLESHEET">
-<title>ESP32-SWITCH</title>
+<link rel="stylesheet" type="text/css" href="/STYLES">
+<title>ESP32C3-DIMMER</title>
 <style>
 table, th, td {border: 1px solid blue; width:font-size:12px; background-color: #ffffcc; }
 th, td { padding-left: 4px; padding-right: 4px;}
 th {background-color: #22ffb3;}
-body {font-size:12px;} tr {height:26px;} 
-.nav { background: #eee; padding: 10px; }
-.nav a { margin-right: 10px; cursor: pointer; color: blue; text-decoration: none; font-size:20px;}
-.container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-tr {height: 20px;}
-
-.close a {
-color:red; 
-text-decoration: none; 
-float:right;   
-font-size:40px;
-font-weight: bold; 
-} 
-
+tr {height:26px;} 
 </style>
 </head><body>
 <div class='container'><div class="nav">
-<span class='close'><a href="/">&times;</a></span>   
+<span class='close'><a href="/">X</a></span>   
 <br><br>
 </div>
-<center>
-<h2>ESP32-SWITCH SYSTEM DATA</h2>
+<center><br>
+<h2>ESP32C3-DIMMER SYSTEM DATA</h2>
 
 )=====";
 

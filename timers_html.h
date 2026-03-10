@@ -6,11 +6,9 @@ const char TIMERCONFIG_MAIN[] PROGMEM = R"=====(
 <meta charset='utf-8'>
 <title>ESP32-C3-DIMMER</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="/STYLES">
 <style>
-.nav { background: #eee; padding: 10px; }
-.nav a { margin-right: 10px; cursor: pointer; color: blue; text-decoration: none; }
 iframe { width: 100%; height: 500px; border: 1px solid #ccc; margin-top: 10px; }
-.container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 </style>
 </head>
 <body>
@@ -20,7 +18,7 @@ iframe { width: 100%; height: 500px; border: 1px solid #ccc; margin-top: 10px; }
         <a onclick="loadTimer(1)">tmr 1</a>
         <a onclick="loadTimer(2)">tmr 2</a>
         <a onclick="loadTimer(3)">tmr 3</a>
- <span style="font-size:40px; font-color:red;"><a href="/" class='close' style="color: red; text-decoration: none; float:right">&times;</a></span>   
+        <span class='close'><a href="/MENU">X</a></span><br>   
 </div>
 
     <!-- Hierin wordt de content geladen -->
@@ -39,22 +37,24 @@ iframe { width: 100%; height: 500px; border: 1px solid #ccc; margin-top: 10px; }
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-tr {height: 40px;}
-.btn { background: #28a745; color: white; padding: 12px; border: none; width: 100%; margin-top: 25px; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: bold; }
-body {font-family:arial; font-size: 14<td>px;}
-tr {height: 40px;}
-table {width: 100%; table-layout: fixed;
-/* Maak de inputs en selects passend */
-input[type='time'], select.sb1 {
-    width: 100%;          /* Gebruik de volledige breedte van de tabelcel */
-    box-sizing: border-box; /* Zorg dat padding de breedte niet beïnvloedt */
-    padding: 5px;
-    /* Iets kleiner op mobiel helpt vaak */
-}
+<link rel="stylesheet" type="text/css" href="/STYLES">
 
-</style></head><body>
-<center><H1 style='color:#e207fa;'>TIMER {nr} </h1>
+<style>
+body {font-family:arial; font-size:14px;}
+tr {height: 40px;}
+.clean-table th {
+  background: none;    
+}
+table {width: 90%; table-layout: fixed;}
+input[type='time'], select.sb1 {
+    width: 100%;          
+    box-sizing: border-box; 
+    padding: 5px;
+}
+</style>
+
+</head><body>
+<center><br><H1 style='color:#e207fa;'>TIMER {nr} </h1>
 <form id='formulier' method='get' action='/submitTimers' target='_parent'>
 
 <center><table>
@@ -79,9 +79,9 @@ input[type='time'], select.sb1 {
 <option value='2' zonattuit_2>after sunrise</option>
 <option value='3' zonattuit_3>before sunset</option>
 <option value='4' zonattuit_4>after sunset</option>
-
 </select></td></tr></table>
-<br><table>
+
+<br><table class="clean-table">
 <tr><thead>
 <th> su <input type='checkbox' name='su' selzo></th>
 <th> mo <input type='checkbox' name='mo' selma></th>
@@ -97,3 +97,4 @@ input[type='time'], select.sb1 {
 
 </center><br></html>
  )=====";
+
