@@ -1,22 +1,14 @@
 void handleLogPage( ) 
 {
-    String uur = String(hour());
-    if(hour() < 10) { 
-          uur = "0" + String(hour());
-    } 
-    String minuten = String(minute());
-    if(minute() < 10) { 
-          minuten = "0" + String(minute());
-    }
-
-    String cont = "";
-    cont += uur + " : " + minuten + " hr.";
-    //char page[1536] = {0};
+    // to get the current time in place
+    char cont[6];
+    snprintf(cont, sizeof(cont), "%02d:%02d", hour(), minute());
+   
     char temp[256]={0};
     //strcpy_P(page, ABOUT); 
     String toZend=FPSTR(HTML_LOGPAGE);
 
-    toZend.replace("!@@!", cont);
+    toZend.replace("%!@@!%", String(cont));
     // this should be displayed with the last event above
     //DebugPrintln(" zendlogpage :build eventlist");  
     byte Log_Count = 0;
@@ -83,7 +75,7 @@ void UpdateLog(int who, String message)
 {
 
     String date = String(day()) + "-" + String(hour()) + ":" + String(minute()) + ":" + String(second());
-      //what = "";}
+   
     strcpy(Log_list[logNr].date, date.c_str());
     Log_list[logNr].kind = who;
     strcpy(Log_list[logNr].message, message.c_str());
@@ -99,23 +91,4 @@ void UpdateLog(int who, String message)
     }
 }      
 
-// void clearLog() {
-//    //Serial.println("clearing the log");
-//    if(logNr != 0) {
-//      String nu="";
-//      String what="";
-//      String message="";
-//            for (int i=0; i <= Log_MaxEvents; i++) {
-//            UpdateLog(7, "");
-//            }
-//         logNr = 0;//start again
-//         Log_MaxReached = false;     
-//         consoleOut("log cleared");   
-//    }
-// }
 
-// void handleLogClear()
-// {
-//    clearLog();
-//    confirm("/LOGPAGE");
-// }

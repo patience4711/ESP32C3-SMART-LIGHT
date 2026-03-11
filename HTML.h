@@ -148,7 +148,7 @@ const char HTML_LOGPAGE[] PROGMEM = R"=====(
 <span class='close'><a href="/">X</a></span>
 <br><br></div><br>
 <h2>ESP32-DIMMER LOG</h2><br>
-<table><tr><td style='width:240px;'>Last refresh : 18 : 31 hr.<td>
+<table><tr><td style='width:240px;'>Last refresh : %!@@!% hr.<td>
 <button onClick='window.location.reload();' style='width: 100px' value='0'>Refresh</button></table><br>
 <table id='lijst'>
 <tr><th style='width:26%;'>Time</th>
