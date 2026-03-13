@@ -1,8 +1,11 @@
+
 #include <Arduino.h>
 
 #include "RMaker.h"
 #include "WiFi.h"
 #include "WiFiProv.h"
+//#include <esp_crt_bundle.h>
+
 #include "driver/ledc.h"  // ha mod
 
 #include <WebServer.h>
@@ -75,7 +78,7 @@ to source more current.
 // #include <EEPROM.h>
 #include <ArduinoJson.h>
 
-#include <PubSubClient.h>
+//#include <PubSubClient.h>
 
 #include <NTPClient.h>
 #include <WiFiUdp.h>
@@ -125,7 +128,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
   time_t Sunset = 0;
   time_t Sunrise = 0; 
   int tKeuze = 0;
-   bool timeRetrieved = false;
+  bool timeRetrieved = false;
   
   typedef struct {
       bool    Active =false;
@@ -136,7 +139,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org");
       uint8_t of_hh = 10; 
       uint8_t of_mm = 10;
       bool dow[7];
-      int     Level = 200;
+      int     Level = 50;
   } myTimers;
   myTimers timers[4];  
 
