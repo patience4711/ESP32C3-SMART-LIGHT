@@ -17,6 +17,9 @@ void startServer()
     server.send(200, "text/html", toSend);
   });  
   
+  server.on("/STYLES", HTTP_GET, []() {
+  server.send_P(200, "text/css", STYLES);
+  });
   
   server.on("/MENU", HTTP_GET, []() {
   // we cannot open the menu from outside our own network.  
@@ -56,8 +59,7 @@ void startServer()
   if(!loginBoth("admin")) return;
   zendpageTimers();
   });
-  
-  
+    
   server.on("/submitTimers", handleTimerSave); 
  
   // this handles the operation of the slider and the saving of defaultpwm
@@ -71,8 +73,12 @@ void startServer()
      } else {   
        set_dim_level(duty);
        UpdateLog(5, "dim command");
-    }
-    server.send(200, "text/plain", "ok");
+      }
+      if(duty == 0) 
+      {
+        dimmer_state = false;
+      }
+      server.send(200, "text/plain", "ok");
    });
    
   server.on("/toggle", HTTP_GET, []() {
@@ -85,16 +91,18 @@ void startServer()
      {
       UpdateLog(5, "switched on");
       set_dim_level(last_duty);
+     
      } else { 
       UpdateLog(5, "switched off");
       set_dim_level(0);
      } 
+     
      // if there is a tinmer active and we switch off, the timer must be disarmed
      if(!dimmer_state) checkTimers();
      });
     
     server.on("/REBOOT", HTTP_GET, []() {
-     procesId = 2; // wait extra long
+     procesId = 4; // wait extra long
      confirm("/");
      //consoleOut("New dimmer_state: " + String(dimmer_state));
      delay(200);
@@ -173,9 +181,9 @@ cont += "   if(secs<=0){ clearInterval(timer); window.parent.location.href='" + 
 cont += " },1000);";
 cont += "}";
 cont += "</script></head>";
-cont += "<body onload='redirect()'>";
-cont += "<br><br><center><h3>processing<br>your request,<br>please wait<br><br>";
-cont += "Redirecting in <span id='counter'></span> seconds...</h3></center>";
+cont += "<body onload='redirect()' style='background-color: #edd8f0;'>";
+cont += "<br><br><center><h1>processing<br>your request,<br>please wait</h1><br><br>";
+cont += "<h3>Redirecting in <span id='counter'></span> seconds...</h3></center>";
 cont += "</body></html>";
 server.send(200, "text/html", cont);
 }

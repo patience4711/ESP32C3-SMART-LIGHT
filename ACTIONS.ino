@@ -1,6 +1,6 @@
-void check_actionFlag()
+void checkActionFlag()
 {
-
+if(actionFlag != 0) consoleOut("an action was triggered " + String(actionFlag));
   if (actionFlag == 20)
   // reconnect mosquitto if something has changed
   {
@@ -16,8 +16,9 @@ void check_actionFlag()
       }
              
        getTijd(); //retrieve time and recalculate timers
+       return;
   }  
 
-
+  actionFlag = 0;
 
 }
