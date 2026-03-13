@@ -169,7 +169,7 @@ void handleToggle() {
 
 void confirm(String dest) {
 //if(device) snprintf(requestUrl, sizeof(requestUrl), "/DEV?welke=%d", devChoice);
-String cont  = "<html><head><script>";
+String cont  = "<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width, initial-scale=1'><meta charset='utf-8'><script>";
 cont += "let waitTime=" + String(3000*procesId) + ";";
 cont += "function redirect(){";
 cont += " let counter=document.getElementById('counter');";
